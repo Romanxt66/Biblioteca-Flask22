@@ -1,4 +1,4 @@
- <!-- Menú de Navegación -->
+<!-- Menú de Navegación -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
       <a class="navbar-brand" href="/">Biblioteca</a>
@@ -8,17 +8,48 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
-              <!-- Usuarios -->
+
               <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Usuarios
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
                       <li><a class="dropdown-item" href="{{ url_for('user.index') }}">Listado</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('user.add') }}">Agregar</a></li>
                       <li><a class="dropdown-item" href="{{ url_for('user.register') }}">Registrarse</a></li>
                   </ul>
               </li>
+
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarPerfil" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Perfil
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarPerfil">
+                      <li><a class="dropdown-item" href="{{ url_for('perfil.mi_perfil') }}">Mi Perfil</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('perfil.index') }}">Todos los perfiles</a></li>
+                      
+                  </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarPublicaciones" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Publicaciones
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarPublicaciones">
+                      <li><a class="dropdown-item" href="{{ url_for('publicacion.index') }}">Listado</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('publicacion.add') }}">Agregar</a></li>
+                  </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarEtiquetas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Etiquetas
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarEtiquetas">
+                      <li><a class="dropdown-item" href="{{ url_for('etiqueta.index') }}">Listado</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('etiqueta.add') }}">Agregar</a></li>
+                  </ul>
+              </li>
+
           </ul>
       </div>
   </div>

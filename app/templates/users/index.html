@@ -3,22 +3,31 @@
 {% block content %}
     
     <div class="text-start">
-        <a href="{{ url_for('user.add') }}" class="btn btn-primary btn-sm mb-1">
-            <i class="bi bi-person-plus"></i> Agregar usuario
+       <a href="{{ url_for('user.register') }}" class="btn btn-primary btn-sm mb-1">
+            <i class="bi bi-person-plus"></i> Registrarse
         </a>
-
-        <!-- Botón para abrir el lector de QR -->
         <a href="#" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal" data-bs-target="#qrReaderModal">
             <i class="bi bi-qr-code-scan"></i> Usar Lector de QR
         </a>
     </div>
+
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar usuario.">
-    <table class="table table-striped">
+
+    <table class="table table-striped table-bordered align-middle" style="table-layout: fixed; word-break: break-all;">
+        <colgroup>
+            <col style="width: 5%;">
+            <col style="width: 20%;">
+            <col style="width: 25%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
         <thead>
+            
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Contraseña</th>
+                <th>Creado en</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -27,7 +36,8 @@
                 <tr>
                     <td>{{ user.idUser }}</td>
                     <td>{{ user.nameUser }}</td>
-                    <td>{{ user.passwordUser }}</td>
+                    <td><span class="text-muted fst-italic small">••••••••</span></td>
+                    <td>{{ user.creado_en.strftime('%d/%m/%Y %H:%M') if user.creado_en else '—' }}</td>
                     <td>
                         <a href="{{ url_for('user.detail', id=user.idUser) }}" class="btn btn-success btn-sm mb-1">
                             <i class="bi bi-person"></i>
@@ -42,21 +52,21 @@
                             <i class="bi bi-qr-code"></i>
                         </button>
                       
-                        <!-- Modal -->
-                        <div class="modal fade" id="qrModal{{ user.idUser }}" tabindex="-1" aria-labelledby="qrModalLabel{{ user.idUser }}" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                        <!-- Modal QR -->
+                        <div class="modal fade" id="qrModal{{ user.idUser }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="qrModalLabel{{ user.idUser }}">Código QR para {{ user.nameUser }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title">Código QR para {{ user.nameUser }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body text-center">
                                         <img src="{{ url_for('user.generate_qr', id=user.idUser) }}" alt="QR Code" class="img-fluid">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary btn-sm w-100 mb-1" data-bs-dismiss="modal">Cerrar</button>
                                         <a href="{{ url_for('user.generate_qr', id=user.idUser) }}" class="btn btn-primary btn-sm w-100 mb-1" download="qr_{{ user.nameUser }}.png">Guardar imagen</a>
-                                      </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,18 +90,16 @@
             });
         });
     </script>
- 
 
-    <!-- Modal para lector de QR -->
-    <div class="modal fade" id="qrReaderModal" tabindex="-1" aria-labelledby="qrReaderModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- Modal lector de QR -->
+    <div class="modal fade" id="qrReaderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="qrReaderModalLabel">Lector de Código QR</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Lector de Código QR</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Contenedor para el lector de QR -->
                     <div id="reader" style="width: 100%;"></div>
                 </div>
                 <div class="modal-footer">
@@ -107,17 +115,14 @@
         function onScanSuccess(decodedText, decodedResult) {
             try {
                 const jsonObject = JSON.parse(decodedText);                
-                // Accede a cada propiedad del objeto JSON
                 const id = jsonObject.ID;
                 const name = jsonObject.Name;
                 window.location.href = `/User/detail/${id}`;
             } catch (error) {
-                // Si el texto decodificado no es un JSON válido, muestra un error
                 console.error("Error al parsear el QR a JSON:", error);
                 alert(`Código QR escaneado: ${decodedText}\nNota: El texto no es un JSON válido.`);
             }
         }
-
 
         function onScanFailure(error) {
             console.warn(`Error de escaneo: ${error}`);
@@ -141,7 +146,6 @@
         });
     </script>
 
-        <!-- Bootstrap y script de HTML5-Qrcode -->
-        <script src="{{ url_for('static', filename='html5-qrcode.min.js') }}"></script>
-  </div>
+    <script src="{{ url_for('static', filename='html5-qrcode.min.js') }}"></script>
+
 {% endblock %}

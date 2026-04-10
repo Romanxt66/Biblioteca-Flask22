@@ -1,44 +1,34 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models.users import User
+from werkzeug.security import check_password_hash
 
 bp = Blueprint('auth', __name__)
 
 @bp.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        nameUser = request.form['nameUser']
+        emailUser    = request.form['emailUser']
         passwordUser = request.form['passwordUser']
-        
-        if (user := User.query.filter_by(nameUser=nameUser, passwordUser=passwordUser).first()):
+
+        user = User.query.filter_by(emailUser=emailUser).first()
+
+        if user and check_password_hash(user.passwordUser, passwordUser):
             login_user(user)
-            flash("Login successful!", "success")
-            return redirect(url_for('user.index'))
+            flash("Login exitoso!", "success")
+            if user.perfil is None:
+                return redirect(url_for('perfil.crear_mio'))
+            return redirect(url_for('perfil.mi_perfil'))
         
-        flash('Invalid credentials. Please try again.', 'danger')
+        flash('Correo o contraseña incorrectos.', 'danger')
     
     if current_user.is_authenticated:
-        return redirect(url_for('auth.dashboard'))
+        return redirect(url_for('perfil.mi_perfil'))
     return render_template("login.html")
-
-@bp.route('/dashboard')
-@login_required
-def dashboard():    
-    return f'Welcome, {current_user.nameUser}! This is your dashboard.'
 
 @bp.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
+    flash('Has cerrado sesión.', 'info')
     return redirect(url_for('auth.login'))
-
-
-@bp.route('/pruebajs')
-def pruebajs():
-    example_data = {
-        'title': 'Bienvenido a Flet',
-        'message': 'Este es un mensaje desde Flask.'
-    }
-    import json
-    return json.dumps(example_data)

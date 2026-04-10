@@ -1,12 +1,16 @@
 from app import db
-from flask_login import UserMixin
+from flask_login import UserMixin    
+from datetime import datetime, timezone
+
+
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-    idUser       = db.Column(db.Integer, primary_key=True)
-    nameUser     = db.Column(db.String(80), nullable=False)
-    emailUser    = db.Column(db.String(120), unique=True, nullable=False)
-    passwordUser = db.Column(db.String(120), nullable=False)
+    __tablename__ = 'usuario'
+    idUser       = db.Column('id',         db.Integer, primary_key=True)
+    nameUser     = db.Column('nombre',     db.String(100), nullable=False)
+    emailUser    = db.Column('email',      db.String(150), unique=True, nullable=False)
+    passwordUser = db.Column('password',   db.String(120), nullable=False)
+    creado_en    = db.Column(db.DateTime,  default=lambda: datetime.now(timezone.utc))
 
     # loansUser         = db.relationship("Loan", back_populates="user", lazy='dynamic')
     # computerLoansUser = db.relationship('ComputerLoan', back_populates='user', lazy='dynamic')
