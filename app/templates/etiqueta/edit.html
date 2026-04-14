@@ -1,18 +1,56 @@
 {% extends "base.html" %}
+{% block page_title %}Editar Etiqueta{% endblock %}
+{% block header_icon %}tag{% endblock %}
 {% block titulo_pagina %}Editar Etiqueta{% endblock %}
+
 {% block content %}
 
-    <form action="{{ url_for('etiqueta.edit', id=etiqueta.id) }}" method="post">
-        <div class="form-group mb-3">
-            <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" value="{{ etiqueta.nombre }}" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="slug" class="form-label">Slug:</label>
-            <input type="text" id="slug" name="slug" class="form-control" value="{{ etiqueta.slug }}" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        <a href="{{ url_for('etiqueta.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
+<div style="max-width:440px;margin:0 auto;">
+
+  <!-- Tag badge -->
+  <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.5rem;">
+    <span class="badge-lib badge-cyan" style="font-size:0.85rem;padding:0.35rem 0.9rem;">
+      <i class="bi bi-tag-fill"></i> {{ etiqueta.nombre }}
+    </span>
+    <code style="background:var(--bg-elevated);color:var(--text-muted);padding:4px 10px;border-radius:4px;font-size:0.78rem;">
+      {{ etiqueta.slug }}
+    </code>
+  </div>
+
+  <form action="{{ url_for('etiqueta.edit', id=etiqueta.id) }}" method="post" id="editEtiquetaForm">
+
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-tag"></i>
+        <input type="text" id="nombre" name="nombre" class="form-control"
+               value="{{ etiqueta.nombre }}" required>
+      </div>
+    </div>
+
+    <!-- Slug -->
+    <div class="mb-4">
+      <label for="slug" class="form-label">Slug</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-link-45deg"></i>
+        <input type="text" id="slug" name="slug" class="form-control"
+               value="{{ etiqueta.slug }}" required
+               style="font-family:var(--font-mono);font-size:0.85rem;">
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="submit" class="btn btn-primary flex-grow-1" id="btnGuardarEdicionEtiqueta">
+        <i class="bi bi-check-circle"></i> Guardar cambios
+      </button>
+      <a href="{{ url_for('etiqueta.index') }}" class="btn btn-secondary" id="btnCancelarEdicionEtiqueta">
+        <i class="bi bi-x-circle"></i> Cancelar
+      </a>
+    </div>
+
+  </form>
+</div>
 
 {% endblock %}

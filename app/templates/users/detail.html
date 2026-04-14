@@ -1,32 +1,108 @@
 {% extends "base.html" %}
-{% block titulo_pagina %}Usuario {{ user.nameUser }}{% endblock %}
+{% block page_title %}{{ user.nameUser }}{% endblock %}
+{% block header_icon %}person-circle{% endblock %}
+{% block titulo_pagina %}Perfil de Usuario{% endblock %}
+
 {% block content %}
-    <div class="container">
-        <table class="table table-bordered">
-            <tr>
-                <th>ID</th>
-                <td>{{ user.idUser }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ user.nameUser }}</td>
-            </tr>
-            <tr>
-                <th>Contraseña</th>
-                <td>{{ user.passwordUser }}</td>
-            </tr>
-        </table>
-        <div class="d-flex justify-content-between">
-            <a href="{{ url_for('user.edit', id=user.idUser) }}" class="btn btn-primary btn-sm mb-1">
-                <i class="bi bi-pencil-square"></i>
-            </a>
-            <a href="{{ url_for('user.delete', id=user.idUser) }}" class="btn btn-danger btn-sm mb-1">
-                <i class="bi bi-trash"></i>
-            </a>
+
+<div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+  <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-sm" id="btnVolverUsuarios">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<!-- User card -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;"
+     class="user-detail-grid">
+
+  <!-- Info -->
+  <div class="lib-card">
+    <div class="lib-card-body">
+      <!-- Avatar + name -->
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:#fff;flex-shrink:0;">
+          {{ user.nameUser[0].upper() if user.nameUser else '?' }}
         </div>
-        <h2 class="text-center">Código QR</h2>
-        <div class="text-center">
-            <img src="{{ url_for('user.generate_qr', id=user.idUser) }}" alt="QR Code" class="img-fluid">
+        <div>
+          <div style="font-size:1rem;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">
+            {{ user.nameUser }}
+          </div>
+          <div>
+            <span class="badge-lib badge-green">
+              <i class="bi bi-person-check-fill"></i> Activo
+            </span>
+          </div>
         </div>
+      </div>
+
+      <div class="lib-divider"></div>
+
+      <!-- Fields -->
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">ID</span>
+          <span class="badge-lib badge-gray" style="font-family:var(--font-mono);">#{{ user.idUser }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Nombre</span>
+          <span style="color:var(--text-primary);font-weight:500;">{{ user.nameUser }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Contraseña</span>
+          <span class="pw-mask">••••••••</span>
+        </div>
+        {% if user.creado_en %}
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Creado</span>
+          <span class="ts-label">{{ user.creado_en.strftime('%d/%m/%Y %H:%M') }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="lib-divider"></div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;">
+        <a href="{{ url_for('user.edit', id=user.idUser) }}"
+           class="btn btn-primary btn-sm" id="btnEditarUsuarioDetail">
+          <i class="bi bi-pencil-square"></i> Editar
+        </a>
+        <a href="{{ url_for('user.delete', id=user.idUser) }}"
+           class="btn btn-danger btn-sm" id="btnEliminarUsuarioDetail"
+           onclick="return confirm('¿Eliminar a {{ user.nameUser }}?')">
+          <i class="bi bi-trash"></i> Eliminar
+        </a>
+      </div>
     </div>
+  </div>
+
+  <!-- QR Code -->
+  <div class="lib-card">
+    <div class="lib-card-body" style="text-align:center;">
+      <div style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:1rem;">
+        <i class="bi bi-qr-code me-1" style="color:var(--accent-cyan)"></i>Código QR
+      </div>
+      <div style="background:white;display:inline-block;padding:1rem;border-radius:var(--radius-md);margin-bottom:1rem;">
+        <img src="{{ url_for('user.generate_qr', id=user.idUser) }}"
+             alt="Código QR de {{ user.nameUser }}"
+             style="max-width:180px;display:block;">
+      </div>
+      <div>
+        <a href="{{ url_for('user.generate_qr', id=user.idUser) }}"
+           class="btn btn-secondary btn-sm" download="qr_{{ user.nameUser }}.png"
+           id="btnDescargarQRDetail">
+          <i class="bi bi-download"></i> Descargar PNG
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+@media(max-width:640px){
+  .user-detail-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+
 {% endblock %}

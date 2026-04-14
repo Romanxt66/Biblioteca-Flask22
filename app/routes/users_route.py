@@ -33,7 +33,7 @@ def add():
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('user.index'))
-    return render_template('users/add.html')
+    return render_template('users/register.html')
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():

@@ -1,20 +1,74 @@
 {% extends "base.html" %}
-{% block titulo_pagina %}Editar Usuario {{ user.nameUser }}{% endblock %}
+{% block page_title %}Editar {{ user.nameUser }}{% endblock %}
+{% block header_icon %}pencil-square{% endblock %}
+{% block titulo_pagina %}Editar Usuario{% endblock %}
+
 {% block content %}
-<h1>Editar Usuario</h1>
-<form action="{{ url_for('user.edit', id=user.idUser) }}" method="post">
-    <div class="form-group mb-3">
-        <label for="nameUser" class="form-label">Nombre:</label>
-        <input type="text" id="nameUser" name="nameUser" value="{{ user.nameUser }}" required class="form-control">
+
+<div style="max-width:480px;margin:0 auto;">
+
+  <!-- User badge -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;padding:0.75rem 1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-default);">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:#fff;flex-shrink:0;">
+      {{ user.nameUser[0].upper() }}
     </div>
-   
-    <div class="form-group mb-3">
-        <label for="passwordUser" class="form-label">Contraseña:</label>
-        <input type="password" id="passwordUser" name="passwordUser" value="{{ user.passwordUser }}" required class="form-control">
+    <div>
+      <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">{{ user.nameUser }}</div>
+      <span class="badge-lib badge-gray" style="font-family:var(--font-mono);">ID #{{ user.idUser }}</span>
     </div>
-    
-    <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
-</form>
+  </div>
+
+  <form action="{{ url_for('user.edit', id=user.idUser) }}" method="post" id="editUserForm">
+
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="nameUser" class="form-label">Nombre de usuario</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-person"></i>
+        <input type="text" id="nameUser" name="nameUser"
+               value="{{ user.nameUser }}" required class="form-control"
+               autocomplete="username">
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="mb-4">
+      <label for="passwordUser" class="form-label">Nueva contraseña</label>
+      <div class="input-icon-wrap" style="position:relative;">
+        <i class="bi bi-lock"></i>
+        <input type="password" id="passwordUser" name="passwordUser"
+               required class="form-control" placeholder="••••••••"
+               autocomplete="new-password">
+        <button type="button" id="togglePassword"
+                style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;"
+                aria-label="Mostrar contraseña">
+          <i class="bi bi-eye" id="eyeIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="submit" class="btn btn-primary flex-grow-1" id="btnActualizarUsuario">
+        <i class="bi bi-check-circle"></i> Actualizar Usuario
+      </button>
+      <a href="{{ url_for('user.index') }}" class="btn btn-secondary" id="btnCancelarEdicion">
+        <i class="bi bi-x-circle"></i> Cancelar
+      </a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('togglePassword');
+  const passInput = document.getElementById('passwordUser');
+  const eyeIcon   = document.getElementById('eyeIcon');
+  toggleBtn.addEventListener('click', () => {
+    const isPass = passInput.type === 'password';
+    passInput.type = isPass ? 'text' : 'password';
+    eyeIcon.className = isPass ? 'bi bi-eye-slash' : 'bi bi-eye';
+  });
+</script>
 
 {% endblock %}
-

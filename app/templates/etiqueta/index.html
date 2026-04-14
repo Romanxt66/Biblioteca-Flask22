@@ -1,41 +1,105 @@
 {% extends "base.html" %}
+{% block page_title %}Etiquetas{% endblock %}
+{% block header_icon %}tags{% endblock %}
 {% block titulo_pagina %}Lista de Etiquetas{% endblock %}
+
 {% block content %}
 
-    <div class="text-start mb-3">
-        <a href="{{ url_for('etiqueta.add') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle"></i> Agregar Etiqueta
-        </a>
-    </div>
+<!-- Toolbar -->
+<div class="page-toolbar">
+  <div class="search-bar-wrap">
+    <i class="bi bi-search search-icon"></i>
+    <input type="text" id="searchInput" class="form-control"
+           placeholder="Buscar por nombre o slug…" autocomplete="off">
+  </div>
+  <div class="toolbar-actions">
+    <a href="{{ url_for('etiqueta.add') }}" class="btn btn-primary btn-sm" id="btnAgregarEtiqueta">
+      <i class="bi bi-plus-circle"></i> Agregar Etiqueta
+    </a>
+  </div>
+</div>
 
-    <table class="table table-striped table-bordered align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Slug</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for e in data %}
-            <tr>
-                <td>{{ e.id }}</td>
-                <td>
-                    <a href="{{ url_for('etiqueta.ver', id=e.id) }}">{{ e.nombre }}</a>
-                </td>
-                <td>{{ e.slug }}</td>
-                <td>
-                    <a href="{{ url_for('etiqueta.edit', id=e.id) }}" class="btn btn-primary btn-sm">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="{{ url_for('etiqueta.delete', id=e.id) }}" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Table -->
+<div style="overflow-x:auto; border-radius: var(--radius-md); border: 1px solid var(--border-default);">
+  <table class="biblioteca-table" id="etiquetasTable" aria-label="Tabla de etiquetas">
+    <thead>
+      <tr>
+        <th style="width:6%">#</th>
+        <th style="width:30%">Nombre</th>
+        <th>Slug</th>
+        <th style="width:16%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="etiquetasBody">
+      {% for e in data %}
+      <tr>
+        <td><span class="badge-lib badge-gray">{{ e.id }}</span></td>
+        <td>
+          <a href="{{ url_for('etiqueta.ver', id=e.id) }}"
+             id="linkEtiqueta-{{ e.id }}"
+             style="color:var(--accent-cyan);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:0.4rem;">
+            <i class="bi bi-tag" style="font-size:0.8rem;opacity:0.7;"></i>
+            {{ e.nombre }}
+          </a>
+        </td>
+        <td>
+          <code style="background:var(--bg-elevated);color:var(--text-muted);padding:2px 8px;border-radius:4px;font-size:0.78rem;">
+            {{ e.slug }}
+          </code>
+        </td>
+        <td>
+          <div class="tabla-acciones">
+            <a href="{{ url_for('etiqueta.edit', id=e.id) }}"
+               class="btn btn-primary btn-sm"
+               id="btnEditarEtiqueta-{{ e.id }}"
+               title="Editar etiqueta">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="{{ url_for('etiqueta.delete', id=e.id) }}"
+               class="btn btn-danger btn-sm"
+               id="btnEliminarEtiqueta-{{ e.id }}"
+               title="Eliminar"
+               onclick="return confirm('¿Eliminar la etiqueta «{{ e.nombre }}»?')">
+              <i class="bi bi-trash"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4">
+          <div class="empty-state">
+            <i class="bi bi-tags"></i>
+            <p>No hay etiquetas registradas</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Counter -->
+<div class="mt-2 d-flex align-items-center gap-2">
+  <span class="badge-lib badge-cyan">
+    <i class="bi bi-tag-fill"></i>
+    <span id="etiquetaCount">{{ data | length }}</span> etiquetas
+  </span>
+</div>
+
+<script>
+  document.getElementById('searchInput').addEventListener('input', function () {
+    const q = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#etiquetasBody tr');
+    let visible = 0;
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const show = text.includes(q);
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('etiquetaCount').textContent = visible;
+  });
+</script>
 
 {% endblock %}

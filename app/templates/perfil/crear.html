@@ -1,17 +1,52 @@
 {% extends "base.html" %}
+{% block page_title %}Crear mi Perfil{% endblock %}
+{% block header_icon %}person-plus{% endblock %}
 {% block titulo_pagina %}Crear mi Perfil{% endblock %}
+
 {% block content %}
 
-    <form action="{{ url_for('perfil.crear_mio') }}" method="post">
-        <div class="form-group mb-3">
-            <label class="form-label">Usuario:</label>
-            <input type="text" class="form-control" value="{{ current_user.nameUser }}" disabled>
-        </div>
-        <div class="form-group mb-3">
-            <label for="bio" class="form-label">Bio:</label>
-            <textarea id="bio" name="bio" class="form-control" rows="3" placeholder="Escribe una bio corta..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Crear Perfil</button>
-    </form>
+<div style="max-width:480px;margin:0 auto;">
+
+  <!-- User badge -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;padding:0.75rem 1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-default);">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:#fff;flex-shrink:0;">
+      {{ current_user.nameUser[0].upper() if current_user.nameUser else '?' }}
+    </div>
+    <div>
+      <div style="font-weight:600;color:var(--text-primary);">{{ current_user.nameUser }}</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);">Completa tu perfil público</div>
+    </div>
+  </div>
+
+  <form action="{{ url_for('perfil.crear_mio') }}" method="post" id="crearPerfilForm">
+
+    <!-- Usuario (readonly) -->
+    <div class="mb-3">
+      <label class="form-label">Usuario</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-person-lock"></i>
+        <input type="text" class="form-control" value="{{ current_user.nameUser }}" disabled>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div class="mb-4">
+      <label for="bio" class="form-label">Bio</label>
+      <textarea id="bio" name="bio" class="form-control" rows="4"
+                placeholder="Cuéntanos algo sobre ti…"></textarea>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem;">
+        Una frase corta que aparecerá en tu perfil público.
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="submit" class="btn btn-primary flex-grow-1" id="btnCrearPerfil">
+        <i class="bi bi-check-circle"></i> Crear Perfil
+      </button>
+    </div>
+
+  </form>
+</div>
 
 {% endblock %}

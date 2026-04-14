@@ -1,56 +1,116 @@
-<!-- Menú de Navegación -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-      <a class="navbar-brand" href="/">Biblioteca</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" 
-              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav">
+<!-- ── Navbar Glassmorphism | Antigravity-OS ── -->
+<nav class="navbar navbar-expand-lg biblioteca-nav" id="mainNav">
+  <div class="container">
 
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Usuarios
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
-                      <li><a class="dropdown-item" href="{{ url_for('user.index') }}">Listado</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('user.register') }}">Registrarse</a></li>
-                  </ul>
-              </li>
+    <!-- Brand -->
+    <a class="navbar-brand" href="/" id="navBrand">
+      <span class="brand-icon"><i class="bi bi-book-half"></i></span>
+      Biblioteca
+    </a>
 
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarPerfil" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Perfil
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarPerfil">
-                      <li><a class="dropdown-item" href="{{ url_for('perfil.mi_perfil') }}">Mi Perfil</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('perfil.index') }}">Todos los perfiles</a></li>
-                      
-                  </ul>
-              </li>
+    <!-- Mobile toggler -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#mainNavCollapse"
+            aria-controls="mainNavCollapse" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarPublicaciones" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Publicaciones
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarPublicaciones">
-                      <li><a class="dropdown-item" href="{{ url_for('publicacion.index') }}">Listado</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('publicacion.add') }}">Agregar</a></li>
-                  </ul>
-              </li>
+    <!-- Nav links -->
+    <div class="collapse navbar-collapse" id="mainNavCollapse">
+      <ul class="navbar-nav me-auto gap-1">
 
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarEtiquetas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Etiquetas
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarEtiquetas">
-                      <li><a class="dropdown-item" href="{{ url_for('etiqueta.index') }}">Listado</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('etiqueta.add') }}">Agregar</a></li>
-                  </ul>
-              </li>
-
+        <!-- Usuarios -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="ddUsuarios"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-people me-1"></i>Usuarios
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="ddUsuarios">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('user.index') }}" id="navUsuariosListado">
+                <i class="bi bi-list-ul"></i> Listado
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('user.register') }}" id="navUsuariosRegistrar">
+                <i class="bi bi-person-plus"></i> Registrarse
+              </a>
+            </li>
           </ul>
+        </li>
+
+        <!-- Perfil -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="ddPerfil"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-badge me-1"></i>Perfil
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="ddPerfil">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('perfil.mi_perfil') }}" id="navMiPerfil">
+                <i class="bi bi-person-circle"></i> Mi Perfil
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('perfil.index') }}" id="navTodosPerfiles">
+                <i class="bi bi-people-fill"></i> Todos los perfiles
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Publicaciones -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="ddPublicaciones"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-journal-text me-1"></i>Publicaciones
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="ddPublicaciones">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('publicacion.index') }}" id="navPublicacionesListado">
+                <i class="bi bi-list-ul"></i> Listado
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('publicacion.add') }}" id="navPublicacionesAgregar">
+                <i class="bi bi-plus-circle"></i> Agregar
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Etiquetas -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="ddEtiquetas"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-tags me-1"></i>Etiquetas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="ddEtiquetas">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('etiqueta.index') }}" id="navEtiquetasListado">
+                <i class="bi bi-list-ul"></i> Listado
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('etiqueta.add') }}" id="navEtiquetasAgregar">
+                <i class="bi bi-plus-circle"></i> Agregar
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+
+      <!-- Right side: user pill -->
+      <div class="d-flex align-items-center ms-auto">
+        <a class="nav-user-pill" href="{{ url_for('perfil.mi_perfil') }}" id="navUserPill" title="Mi Perfil">
+          <span class="avatar">
+            <i class="bi bi-person-fill" style="font-size:0.75rem"></i>
+          </span>
+          Mi cuenta
+        </a>
       </div>
+    </div>
+
   </div>
 </nav>

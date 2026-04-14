@@ -1,27 +1,85 @@
 {% extends "base.html" %}
+{% block page_title %}Registrarse{% endblock %}
+{% block header_icon %}person-plus{% endblock %}
+{% block titulo_pagina %}Crear Cuenta{% endblock %}
+
 {% block content %}
-<h2>Registro de usuario</h2>
 
-{% if errors %}
-  <ul style="color:red;">
+<div style="max-width:480px;margin:0 auto;">
+
+  <!-- Errores de validación -->
+  {% if errors %}
+  <div class="mb-3">
     {% for error in errors %}
-      <li>{{ error }}</li>
+    <div class="flash-message alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
     {% endfor %}
-  </ul>
-{% endif %}
+  </div>
+  {% endif %}
 
-<form method="POST" action="{{ url_for('user.register') }}">
-  <label>Nombre</label>
-  <input type="text" name="nameUser" value="{{ nameUser }}" required>
+  <form method="POST" action="{{ url_for('user.register') }}" id="registerForm" novalidate>
 
-  <label>Email</label>
-  <input type="email" name="emailUser" value="{{ emailUser }}" required>
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="nameUser" class="form-label">Nombre de usuario</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-person"></i>
+        <input type="text" name="nameUser" id="nameUser" class="form-control"
+               value="{{ nameUser | default('') }}"
+               placeholder="Tu nombre" required autocomplete="username">
+      </div>
+    </div>
 
-  <label>Contraseña</label>
-  <input type="password" name="passwordUser" required>
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="emailUser" class="form-label">Correo electrónico</label>
+      <div class="input-icon-wrap">
+        <i class="bi bi-envelope"></i>
+        <input type="email" name="emailUser" id="emailUser" class="form-control"
+               value="{{ emailUser | default('') }}"
+               placeholder="tu@correo.com" required autocomplete="email">
+      </div>
+    </div>
 
-  <button type="submit">Registrarse</button>
-</form>
+    <!-- Password -->
+    <div class="mb-4">
+      <label for="passwordUser" class="form-label">Contraseña</label>
+      <div class="input-icon-wrap" style="position:relative;">
+        <i class="bi bi-lock"></i>
+        <input type="password" name="passwordUser" id="passwordUser" class="form-control"
+               placeholder="Mínimo 8 caracteres" required autocomplete="new-password">
+        <button type="button" id="togglePassword"
+                style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;"
+                aria-label="Mostrar contraseña">
+          <i class="bi bi-eye" id="eyeIcon"></i>
+        </button>
+      </div>
+    </div>
 
-<a href="{{ url_for('user.index') }}">Volver</a>
+    <!-- Actions -->
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="submit" class="btn btn-primary flex-grow-1" id="btnRegistrar">
+        <i class="bi bi-person-plus"></i> Crear Cuenta
+      </button>
+      <a href="{{ url_for('user.index') }}" class="btn btn-secondary" id="btnCancelarRegistro">
+        <i class="bi bi-x-circle"></i> Cancelar
+      </a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('togglePassword');
+  const passInput = document.getElementById('passwordUser');
+  const eyeIcon   = document.getElementById('eyeIcon');
+  toggleBtn.addEventListener('click', () => {
+    const isPass = passInput.type === 'password';
+    passInput.type = isPass ? 'text' : 'password';
+    eyeIcon.className = isPass ? 'bi bi-eye-slash' : 'bi bi-eye';
+  });
+</script>
+
 {% endblock %}

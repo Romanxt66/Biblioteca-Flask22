@@ -1,27 +1,55 @@
 {% extends "base.html" %}
+{% block page_title %}Etiquetas de la Publicación{% endblock %}
+{% block header_icon %}tags{% endblock %}
 {% block titulo_pagina %}Etiquetas de la Publicación{% endblock %}
+
 {% block content %}
 
-    <a href="{{ url_for('publicacion.index') }}" class="btn btn-secondary btn-sm mb-3">
-        <i class="bi bi-arrow-left"></i> Volver
-    </a>
-
-    <div class="mb-3">
-        <strong>Título:</strong> {{ pub.titulo }}<br>
-        <strong>Autor:</strong> {{ pub.usuario.nameUser }}
+<!-- Back + pub info -->
+<div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+  <a href="{{ url_for('publicacion.index') }}" class="btn btn-secondary btn-sm" id="btnVolverPublicaciones">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+  <div>
+    <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">
+      {{ pub.titulo }}
     </div>
+    <div style="font-size:0.78rem;color:var(--text-muted);">
+      <i class="bi bi-person me-1"></i>{{ pub.usuario.nameUser if pub.usuario else '—' }}
+    </div>
+  </div>
+</div>
 
-    <h5>Etiquetas</h5>
-    {% if pub.etiquetas %}
-        <div class="mt-2">
-            {% for e in pub.etiquetas %}
-                <a href="{{ url_for('etiqueta.ver', id=e.id) }}" class="badge bg-secondary text-decoration-none fs-6 me-1">
-                    {{ e.nombre }}
-                </a>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p class="text-muted">Esta publicación no tiene etiquetas.</p>
-    {% endif %}
+<div class="lib-divider"></div>
+
+<h5 style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">
+  <i class="bi bi-tags me-2" style="color:var(--accent-cyan)"></i>Etiquetas asignadas
+</h5>
+
+{% if pub.etiquetas %}
+  <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+    {% for e in pub.etiquetas %}
+      <a href="{{ url_for('etiqueta.ver', id=e.id) }}"
+         id="tagLink-{{ e.id }}"
+         style="text-decoration:none;">
+        <span class="badge-lib badge-cyan"
+              style="font-size:0.85rem;padding:0.4rem 1rem;cursor:pointer;transition:all 0.2s;">
+          <i class="bi bi-tag-fill" style="font-size:0.72rem;"></i>
+          {{ e.nombre }}
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+  <div class="mt-3">
+    <span class="badge-lib badge-gray">
+      {{ pub.etiquetas | length }} etiqueta{{ 's' if pub.etiquetas | length != 1 else '' }}
+    </span>
+  </div>
+{% else %}
+  <div class="empty-state">
+    <i class="bi bi-tag-slash"></i>
+    <p>Esta publicación no tiene etiquetas asignadas.</p>
+  </div>
+{% endif %}
 
 {% endblock %}

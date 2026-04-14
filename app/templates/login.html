@@ -1,41 +1,110 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inicia sesión en el sistema de gestión Biblioteca">
+  <title>Iniciar Sesión | Biblioteca</title>
 
-{% block titulo_pagina %}Bienvenido a mi aplicativo{% endblock %}
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+  <!-- Icons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-icons.min.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Design system -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='biblioteca.css') }}">
+</head>
 
-{% block content %}
+<body class="biblioteca-body">
 
-<div class="d-flex justify-content-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg border-0 rounded-lg">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h1 class="h4">Iniciar sesión</h1>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="{{ url_for('auth.login') }}">
-                            <div class="form-group mb-3">
-                                <label for="emailUser" class="form-label">Correo</label>
-                                <input type="email" name="emailUser" id="emailUser" class="form-control" required>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="passwordUser" class="form-label">Contraseña</label>
-                                <input type="password" name="passwordUser" id="passwordUser" class="form-control" required>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                                </button>
-                                <a href="{{ url_for('user.add') }}" class="btn btn-secondary btn-block">
-                                    <i class="bi bi-person-plus"></i> Crear Cuenta
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+  <!-- Flash messages global -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="position:fixed;top:1rem;right:1rem;z-index:9999;min-width:300px;">
+        {% for category, message in messages %}
+          <div class="flash-message alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="login-page">
+    <div class="login-card">
+
+      <!-- Header -->
+      <div class="login-card-header">
+        <div class="login-logo">
+          <i class="bi bi-book-half"></i>
         </div>
-    </div>
-</div>
+        <h1>Bienvenido de vuelta</h1>
+        <p>Ingresa tus credenciales para continuar</p>
+      </div>
 
-{% endblock %}
+      <!-- Body -->
+      <div class="login-card-body">
+        <form method="post" action="{{ url_for('auth.login') }}" id="loginForm" novalidate>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="emailUser" class="form-label">Correo electrónico</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-envelope"></i>
+              <input type="email" name="emailUser" id="emailUser"
+                     class="form-control" placeholder="tu@correo.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label for="passwordUser" class="form-label">Contraseña</label>
+            <div class="input-icon-wrap" style="position:relative;">
+              <i class="bi bi-lock"></i>
+              <input type="password" name="passwordUser" id="passwordUser"
+                     class="form-control" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" id="togglePassword"
+                      style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;"
+                      aria-label="Mostrar contraseña">
+                <i class="bi bi-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" id="btnLogin">
+              <i class="bi bi-box-arrow-in-right"></i>
+              Iniciar Sesión
+            </button>
+            <a href="{{ url_for('user.register') }}" class="btn btn-secondary" id="btnCrearCuenta">
+              <i class="bi bi-person-plus"></i>
+              Crear Cuenta
+            </a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.js') }}"></script>
+  <script>
+    // Toggle password visibility
+    const toggleBtn = document.getElementById('togglePassword');
+    const passInput = document.getElementById('passwordUser');
+    const eyeIcon   = document.getElementById('eyeIcon');
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = passInput.type === 'password';
+      passInput.type = isPassword ? 'text' : 'password';
+      eyeIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
+    });
+  </script>
+</body>
+</html>

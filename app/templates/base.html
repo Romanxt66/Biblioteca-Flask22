@@ -3,59 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Aplicación</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css')}}">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='all.min.css') }}"> 
+    <meta name="description" content="Biblioteca — Gestión de publicaciones, usuarios y etiquetas">
+    <title>{% block page_title %}Biblioteca{% endblock %} | Sistema de Gestión</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-icons.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Antigravity Design System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='biblioteca.css') }}">
 </head>
 
-<body class="d-flex flex-column h-100 bg-light">
-  
+<body class="biblioteca-body d-flex flex-column h-100">
+
   {% include 'menu.html' %}
 
-  <main class="flex-shrink-0">
+  <main class="flex-shrink-0 py-4">
+    <div class="container">
 
-    <div class="container mt-4 mx-auto">
-
+      <!-- Flash messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}             
-          {% for category, message in messages %}
-            <div class="flash-message alert alert-{{ category }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          {% endfor %}
+        {% if messages %}
+          <div class="mb-3">
+            {% for category, message in messages %}
+              <div class="flash-message alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% elif category == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+              </div>
+            {% endfor %}
+          </div>
         {% endif %}
       {% endwith %}
 
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="card shadow-sm border border-2 border-primary">
-            <div class="card-header bg-primary text-white">
-              <h4 class="mb-0 text-center">{% block titulo_pagina %}{% endblock %}</h4>
-            </div>
-            <div class="card-body">
-              <div class="container-fluid p-3">
-
-                {% block content %}
-                {% endblock %}
-                
-              </div>
-            </div>
+      <!-- Page shell card -->
+      <div class="biblioteca-shell">
+        <div class="biblioteca-shell-header">
+          <div class="shell-header-icon">
+            <i class="bi bi-{% block header_icon %}grid{% endblock %}"></i>
+          </div>
+          <h4>{% block titulo_pagina %}{% endblock %}</h4>
+        </div>
+        <div class="biblioteca-shell-body">
+          <div class="container-fluid p-0">
+            {% block content %}{% endblock %}
           </div>
         </div>
       </div>
+
     </div>
   </main>
 
-  <footer class="footer mt-auto py-3 bg-dark text-white">
-    <div class="container text-center">
-      <span class="text-white">&copy; 2024 Mi Aplicación. Esta obra está bajo una <a href="http://creativecommons.org/licenses/by/4.0/" class="text-white">Licencia Creative Commons Atribución 4.0 Internacional</a>.</span>
+  <!-- Footer -->
+  <footer class="biblioteca-footer mt-auto">
+    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <span>
+        <i class="bi bi-book-half me-1" style="color: var(--accent-cyan)"></i>
+        <strong style="color: var(--text-secondary)">Biblioteca</strong>
+        <span class="ms-2">Sistema de Gestión v2.0</span>
+      </span>
+      <span>
+        &copy; 2026 &mdash;
+        <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">
+          CC BY 4.0
+        </a>
+      </span>
     </div>
   </footer>
 
+  <!-- Bootstrap JS -->
   <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.js') }}"></script>
 
 </body>
